@@ -24,17 +24,16 @@ public class HelloMessageListener {
 
 	@JmsListener(destination = JmsConfig.MY_QUEUE)
 	public void listen(@Payload HelloWorldMessage helloWorldMessage, @Headers MessageHeaders headers, Message message) {
-		System.out.println("I got a message!");
-		System.out.println(helloWorldMessage.getMessage());
+		//System.out.println("I got a message!");
+		//System.out.println(helloWorldMessage.getMessage());
 	}
 
 	@JmsListener(destination = JmsConfig.MY_SEND_RCV_QUEUE)
-	public void listenForHello(@Payload HelloWorldMessage helloWorldMessage, @Headers MessageHeaders headers,
-			Message message) throws JmsException, JMSException {
+	public void listenForHello(@Payload HelloWorldMessage helloWorldMessage, @Headers MessageHeaders headers, Message jmsMessage, org.springframework.messaging.Message springMessage) throws JmsException, JMSException {
 
 		HelloWorldMessage payloadMsg = HelloWorldMessage.builder().id(UUID.randomUUID()).message("World!!").build();
-		jmsTemplate.convertAndSend(message.getJMSReplyTo(), payloadMsg);
-
+		//jmsTemplate.convertAndSend(message.getJMSReplyTo(), payloadMsg);
+		jmsTemplate.convertAndSend(jmsMessage.getJMSReplyTo(), payloadMsg);
 		//System.out.println(helloWorldMessage.getMessage());
 	}
 }
